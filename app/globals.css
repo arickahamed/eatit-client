@@ -2,26 +2,44 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap");
+
+.swiper-pagination {
+  bottom: 20;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Pagination Dots */
+.swiper-pagination-bullet {
+  background-color: #cc3333 !important; /* Default dot color */
+  opacity: 0.6 !important; /* Optional: make it a bit transparent */
+  margin: 10px 5px !important;
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+.swiper-pagination-bullet-active {
+  background-color: #cc3333; /* Active dot color */
+  opacity: 1; /* Full opacity for active dot */
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+/* Navigation Arrows */
+.swiper-button-prev,
+.swiper-button-next {
+  color: #cc3333;
+  opacity: 1; /* Color of the arrow buttons */
+}
+
+/* Change color on hover */
+.swiper-button-prev:hover,
+.swiper-button-next:hover {
+  color: #cc3333;
+  opacity: 0.6; /* Change color on hover */
+}
+
+.swiper-button-prev,
+.swiper-button-next {
+  width: 10px; /* Set arrow width */
+  height: 10px; /* Set arrow height */
+  font-size: 10px; /* Set the font size to increase arrow icon size */
 }
