@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import loginHeroImage from "./loginImage/hero-login.png";
 import HeroSection from '@/components/shared/HeroSection';
 import Link from 'next/link';
@@ -7,49 +7,102 @@ import ScrollUp from '../../components/shared/ScrollUp';
 import ShowToast from '@/components/shared/ShowToast';
 import { useRouter } from 'next/navigation';
 import { ToastContainer } from 'react-toastify';
-
+import axios from 'axios';
+import { setWithExpiry } from '@/utils/localStorage';
+import { getWithExpiry } from "@/utils/localStorage";
+import { useAppDispatch, useAppSelector } from '@/lib/redux/hooks';
+import { setAuthData } from '@/lib/redux/features/auth/authSlice';
+interface User {
+  email: string;
+  [key: string]: any; // Optional for other potential properties
+}
 
 const login = () => {
   const router = useRouter();
+  const [userEmail, setUserEmail] = useState<string | null>(null);
+  const [userRole, setUserRole] = useState<string | null>(null);
+  const [localStorageKey, setLocalStorageKey] = useState(0);
+  const dispatch = useAppDispatch();
+
+  const updateEmailFromStorage = () => {
+      const stringifyUser = getWithExpiry("user");
+      if (stringifyUser) {
+        const user: User = JSON.parse(stringifyUser);
+
+        // Update Redux store
+        dispatch(setAuthData({ email: user.email, role: user.role }));
+        setLocalStorageKey(() => localStorageKey + 1);
+      } else {
+        // Clear Redux store if no user
+        dispatch(setAuthData({ email: null, role: null }));
+      }
+    };
+
 
   // handling the form data
   const [formData, setFormData] = useState({
-      email: "",
-      password: ""
+    email: "",
+    password: "",
   });
 
   const handleInputChange = (event: any) => {
-    const {name, value} = event.target;
+    const { name, value } = event.target;
     setFormData((prevData) => ({
       ...prevData,
-      [name] : value,
+      [name]: value,
     }));
   };
 
-  const handleSubmit = (event: any) => {
+  const handleSubmit = async (event: any) => {
     event.preventDefault();
-    if(formData.email.length > 5 && formData.password.length > 4 ) {
-      console.log(formData),
-      setFormData({
-        email: "",
-        password: ""
-      })
-      ShowToast({ type: "success", message: "Successfully loggedin!" });
+    if (formData.email.length > 5 && formData.password.length > 4) {
+      const collectedData = {
+        email: formData.email,
+        password: formData.password,
+      };
+      try {
+        const res = await axios.post(
+          "http://localhost:8080/api/v1/users/login",
+          collectedData
+        );
+        const data = res.data;
+        if (data.success) {
+          setWithExpiry("user", JSON.stringify(data.data), 5);
+          updateEmailFromStorage();
+          ShowToast({ type: "success", message: data.message });
+          setFormData({
+            email: "",
+            password: "",
+          });
+          setTimeout(() => {
+            router.push("/");
+          }, 2000);
+        } else {
+          ShowToast({ type: "error", message: data.message });
+          console.log(data);
+        }
+      } catch (err) {
+        console.log("something  went wrong");
+        ShowToast({ type: "error", message: "Fill the form correctly!" });
+      }
       setTimeout(() => {
         router.push("/");
       }, 2000);
-
-    }else{
+    } else {
       ShowToast({ type: "error", message: "Fill the form correctly!" });
     }
-  }
+  };
 
+  useEffect(() => {
+    updateEmailFromStorage();
+  }, [])
 
-    const heroInfo = {
-      img: loginHeroImage,
-      title: "login-register",
-      description: "let's join us",
-    };
+  const heroInfo = {
+    img: loginHeroImage,
+    title: "login-register",
+    description: "let's join us",
+  };
+
   return (
     <main className="w-full pb-6">
       <HeroSection data={heroInfo} />
@@ -96,5 +149,5 @@ const login = () => {
     </main>
   );
 }
-
 export default login;
+

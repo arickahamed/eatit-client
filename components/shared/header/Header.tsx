@@ -7,42 +7,64 @@ import { HiMenuAlt3 } from "react-icons/hi";
 import { RxCross2 } from "react-icons/rx";
 import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import Button from "../overall/Button";
+import Button from "../../overall/Button";
 import "./Header.css";
+import { HeaderData } from "./HeaderData";
+import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
+import { clearAuthData } from "@/lib/redux/features/auth/authSlice";
+import { persistor } from "@/lib/redux/store";
 
 const Header = () => {
   const router = useRouter();
   const pathName = usePathname();
   const [openNav, setOpenNav] = useState(false);
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
-    if(window.scrollY > 5) {
-      window.scrollTo({top: 0, behavior: "smooth"});
+    if (window.scrollY > 5) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
       setOpenNav(!openNav);
-    }else {
+    } else {
       setOpenNav(!openNav);
     }
   };
 
+  const email = useAppSelector((state) => state.auth.email);
+
+   const dispatch = useAppDispatch();
+
+   const handleLogout = async () => {
+     try {
+       dispatch(clearAuthData());
+       await persistor.purge(); // Purge the storage
+       localStorage.removeItem("user");
+       console.log("Logout successful: State purged");
+     } catch (error) {
+       console.error("Error during logout: ", error);
+     }
+   };
+
   const isActive = (href: string) => pathName == href;
 
   useEffect(() => {
-    if(openNav) {
+    if (openNav) {
       document.body.style.overflow = "hidden";
-    }else {
+    } else {
       document.body.style.overflow = "";
     }
-    
+
     return () => {
       document.body.style.overflow = "";
     };
-  }, [openNav])
+  }, [openNav]);
+
   return (
     <section>
       <main>
         {/* top section */}
         <div className="bg-primary text-customWhite text-[8px] sm:text-12 md:text-12 lg:text-12">
           <div className="text-12 p-2 w-[90%] m-auto flex justify-between items-center">
-            <div className=" sm:w-[45%] md:w-[39%] w-[40%] sm:flex md:flex justify-between">
+            <div
+              className={`sm:w-[60%] md:w-[55%] w-[40%] sm:flex md:flex justify-between`}
+            >
               <div className="flex md:w-[40%] sm:w-[47%] items-center">
                 <Image
                   src={clockIcon}
@@ -61,6 +83,11 @@ const Header = () => {
                 />
                 <p className="pl-2">+8801774887213</p>
               </div>
+              {email && (
+                <div>
+                  <p>{email}</p>
+                </div>
+              )}
             </div>
             <p>Get 20% off on first order!</p>
           </div>
@@ -106,76 +133,37 @@ const Header = () => {
                   : "hidden"
               } sm:flex md:flex sm:w-[48%] md:w-[45%] lg:w-[35%] justify-between items-center font-bold`}
             >
-              <Link
-                className={`${
-                  isActive("/about")
-                    ? "active"
-                    : "hover:border-b hover:border-primary"
-                }`}
-                onClick={() => {
-                  if (openNav) {
-                    setOpenNav(false);
-                  }
-                }}
-                href="/about"
-              >
-                About
-              </Link>
-              <Link
-                className={`${
-                  isActive("/items")
-                    ? "active"
-                    : "hover:border-b hover:border-primary"
-                }`}
-                onClick={() => {
-                  if (openNav) {
-                    setOpenNav(false);
-                  }
-                }}
-                href="/items"
-              >
-                Items
-              </Link>
-              <Link
-                className={`${
-                  isActive("/contact")
-                    ? "active"
-                    : "hover:border-b hover:border-primary"
-                }`}
-                onClick={() => {
-                  if (openNav) {
-                    setOpenNav(false);
-                  }
-                }}
-                href="/contact"
-              >
-                Contact
-              </Link>
-              <Link
-                className={`${
-                  isActive("/cart")
-                    ? "active"
-                    : "hover:border-b hover:border-primary"
-                }`}
-                onClick={() => {
-                  if (openNav) {
-                    setOpenNav(false);
-                  }
-                }}
-                href="/cart"
-              >
-                Cart
-              </Link>
+              {/* dynamic header data */}
+              {HeaderData.map((info, index) => {
+                return (
+                  <Link
+                    key={info.id || index}
+                    className={`${
+                      isActive("/about")
+                        ? "active"
+                        : "hover:border-b hover:border-primary"
+                    }`}
+                    onClick={() => {
+                      if (openNav) {
+                        setOpenNav(false);
+                      }
+                    }}
+                    href={info.pathName}
+                  >
+                    {info.name}
+                  </Link>
+                );
+              })}
+              {/* Login Logout button  */}
               <Button>
                 <Link
                   href="/login"
                   onClick={() => {
-                    if (openNav) {
-                      setOpenNav(false);
-                    }
+                    openNav && setOpenNav(false);
+                    email && handleLogout();
                   }}
                 >
-                  Login
+                  {email ? "Logout" : "Login"}
                 </Link>
               </Button>
             </div>

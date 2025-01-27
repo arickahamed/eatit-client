@@ -7,17 +7,24 @@ import ScrollUp from '@/components/shared/ScrollUp';
 import { useRouter } from 'next/navigation';
 import { toast, ToastContainer } from 'react-toastify';
 import ShowToast from '@/components/shared/ShowToast';
+import axios from 'axios';
 
 
 const Register = () => {
   const router = useRouter();
-
+  const [role, setRole] = useState("user");
+  const [response, setResponse] = useState(null);
   // handling the form data
   const [formData, setFormData] = useState({
     email: "",
     password: "",
-    rePassword: ""
+    rePassword: "",
+    role: role
   });
+
+  const onOptionChange = (e: any) => {
+    setRole(e.target.value);
+  };
 
   const handleInputChange = (event: any) => {
     const { name, value } = event.target;
@@ -27,19 +34,26 @@ const Register = () => {
     }));
   };
 
-  const handleSubmit = (event: any) => {
+  const handleSubmit = async(event: any) => {
     event.preventDefault();
     if (formData.email.length > 5 && formData.password.length > 4 && formData.rePassword && formData.password === formData.rePassword) {
-      console.log(formData),
-        setFormData({
-          email: "",
-          password: "",
-          rePassword: ""
-        });
-        ShowToast({type: "success", message:"Successfully registered!"});
-        setTimeout(() => {
-                router.push("/login")
-        }, 2000);
+      const collectedData = {email: formData.email, password: formData.password, role: role};
+        try {
+          const res = await axios.post("http://localhost:8080/api/v1/users/register", collectedData);
+          ShowToast({ type: "success", message: res.data.message });
+            setFormData({
+              email: "",
+              password: "",
+              rePassword: "",
+              role:"user"
+            });
+          setTimeout(() => {
+            router.push("/login");
+          }, 2000);
+        } catch (err) {
+          console.log("something  went wrong");
+          ShowToast({ type: "error", message: "Fill the form correctly!" });
+        }
     } else {
       ShowToast({ type: "error", message: "Fill the form correctly!" });
     }
@@ -83,9 +97,37 @@ const Register = () => {
             placeholder="Re-enter Your Password"
           />
           <br />
+          <div className="flex items-center justify-center mx-auto">
+            <h3 className='mr-1'>role: </h3>
+              <input
+                className='mx-1'
+                type="radio"
+                name="role"
+                value="user"
+                id="user"
+                checked={role === "user"}
+                onChange={onOptionChange}
+              />
+              <label className='mr-2'>user</label>
+
+              <input
+                className='mx-1'
+                type="radio"
+                name="role"
+                value="admin"
+                id="admin"
+                checked={role === "admin"}
+                onChange={onOptionChange}
+              />
+              <label>admin</label>
+          </div>
+          <br />
           <button
             className={`${
-              formData.email.length > 5 && formData.password.length > 4 && formData.rePassword && formData.password === formData.rePassword
+              formData.email.length > 5 &&
+              formData.password.length > 4 &&
+              formData.rePassword &&
+              formData.password === formData.rePassword
                 ? "border-red-600 bg-primary text-customWhite"
                 : "disabled border-black bg-gray-300"
             } border  mt-2 py-2 px-4 rounded-md shadow-md transition ease-in-out delay-150 cursor-pointer`}

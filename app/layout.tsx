@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Header from "../components/shared/Header";
+import Header from "../components/shared/header/Header";
 import Footer from "../components/shared/Footer";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import StoreProvider from './StoreProvider';
 
 export const metadata: Metadata = {
   title: "eat-it",
@@ -18,10 +19,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="font-roboto text-secondary bg-customWhite flex flex-col min-h-screen">
-        <Header />
-        {children}
-        <ToastContainer />
-        <Footer />
+        <StoreProvider>
+          <Header />
+          {children}
+          <ToastContainer />
+          <Footer />
+        </StoreProvider>
       </body>
     </html>
   );
