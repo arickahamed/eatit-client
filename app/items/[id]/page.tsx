@@ -1,5 +1,6 @@
 "use client";
 
+
 import HeroSection from '@/components/shared/HeroSection';
 import ScrollUp from '@/components/shared/ScrollUp';
 import { useAppSelector } from '@/lib/redux/hooks';
