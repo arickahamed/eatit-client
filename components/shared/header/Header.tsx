@@ -9,10 +9,10 @@ import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Button from "../../overall/Button";
 import "./Header.css";
-import { HeaderData } from "./HeaderData";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { clearAuthData } from "@/lib/redux/features/auth/authSlice";
 import { persistor } from "@/lib/redux/store";
+import { useHeaderData } from "./HeaderData";
 
 const Header = () => {
   const router = useRouter();
@@ -27,9 +27,11 @@ const Header = () => {
     }
   };
 
-  const email = useAppSelector((state) => state.auth.email);
+  const user = useAppSelector((state) => state.auth);
 
    const dispatch = useAppDispatch();
+   const HeaderData = useHeaderData();
+
 
    const handleLogout = async () => {
      try {
@@ -83,9 +85,9 @@ const Header = () => {
                 />
                 <p className="pl-2">+8801774887213</p>
               </div>
-              {email && (
+              {user.email && (
                 <div>
-                  <p>{email}</p>
+                  <p>{user.email}</p>
                 </div>
               )}
             </div>
@@ -131,7 +133,7 @@ const Header = () => {
                 openNav
                   ? "flex flex-col self-center justify-center w-screen h-[65%] text-35"
                   : "hidden"
-              } sm:flex md:flex sm:w-[48%] md:w-[45%] lg:w-[35%] justify-between items-center font-bold`}
+              } sm:flex md:flex  {user.role == "admin"? "sm:w-[55%] md:w-[55%] lg:w-[50%]" : "sm:w-[55%] md:w-[45%] lg:w-[35%]" } justify-between items-center font-bold`}
             >
               {/* dynamic header data */}
               {HeaderData.map((info, index) => {
@@ -139,7 +141,7 @@ const Header = () => {
                   <Link
                     key={info.id || index}
                     className={`${
-                      isActive("/about")
+                      isActive(info.pathName)
                         ? "active"
                         : "hover:border-b hover:border-primary"
                     }`}
@@ -160,10 +162,10 @@ const Header = () => {
                   href="/login"
                   onClick={() => {
                     openNav && setOpenNav(false);
-                    email && handleLogout();
+                    user.email && handleLogout();
                   }}
                 >
-                  {email ? "Logout" : "Login"}
+                  {user.email ? "Logout" : "Login"}
                 </Link>
               </Button>
             </div>

@@ -1,6 +1,7 @@
 "use client";
 import SpecialMenuData from "@/data/SpecialMenuData";
 import Image from "next/image";
+import Link from "next/link";
 import React, { useState } from "react";
 
 const SpecialMenuForAllTime = () => {
@@ -24,8 +25,10 @@ const SpecialMenuForAllTime = () => {
               onMouseEnter={() => handleMouseEnter(index)}
               onMouseLeave={handleMouseLeave}
             >
-              <Image src={info.image} alt={info.title} width={70} />
-              <h3 className="text-20 text-center pt-2">{info.title}</h3>
+              <Link href={`/items`}>
+                <Image src={info.image} alt={info.title} width={70} />
+                <h3 className="text-20 text-center pt-2">{info.title}</h3>
+              </Link>
             </div>
           );
         })}

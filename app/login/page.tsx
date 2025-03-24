@@ -14,7 +14,7 @@ import { useAppDispatch, useAppSelector } from '@/lib/redux/hooks';
 import { setAuthData } from '@/lib/redux/features/auth/authSlice';
 interface User {
   email: string;
-  [key: string]: any; // Optional for other potential properties
+  [key: string]: any; 
 }
 
 const login = () => {
@@ -29,17 +29,14 @@ const login = () => {
       if (stringifyUser) {
         const user: User = JSON.parse(stringifyUser);
 
-        // Update Redux store
         dispatch(setAuthData({ email: user.email, role: user.role }));
         setLocalStorageKey(() => localStorageKey + 1);
       } else {
-        // Clear Redux store if no user
         dispatch(setAuthData({ email: null, role: null }));
       }
     };
 
 
-  // handling the form data
   const [formData, setFormData] = useState({
     email: "",
     password: "",
