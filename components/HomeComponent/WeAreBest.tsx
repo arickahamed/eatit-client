@@ -3,6 +3,7 @@ import Image from "next/image";
 import React, { useState } from "react";
 import Button from "../overall/Button";
 import { WeAreBestData } from "@/data/WeAreBestData";
+import Link from "next/link";
 
 const WeAreBest = () => {
   const [hoverIndex, setHoverIndex] = useState(null);
@@ -26,55 +27,57 @@ const WeAreBest = () => {
               onMouseEnter={() => handleMouseEnter(index)}
               onMouseLeave={handleMouseLeave}
             >
-              <div className=" py-2 mt-3 flex flex-col justify-center items-center z-10 top-0 left-[50%]">
-                <Image
-                  className="flex flex-col justify-center items-center relative z-10"
-                  src={info.image}
-                  alt="cooking image"
-                  width={100}
-                  height={100}
-                />
-              </div>
-              <div
-                className={`absolute top-0 left-[55%] w-[6rem] h-[6rem] mt-2 rounded-full  z-0 flex justify-center items-center ${
-                  isHovered
-                    ? "bg-customWhite text-primary"
-                    : "bg-primary text-customWhite"
-                }`}
-              >
-                <h3
-                  className={` text-35 font-bold ${
-                    isHovered ? "bg-customWhite text-primary" : ""
-                  }`}
-                >
-                  {index + 1}
-                </h3>
-              </div>
-
-              <h3
-                className={`text-20 font-bold py-4 text-center ${
-                  isHovered ? "text-customWhite" : "text-secondary"
-                }`}
-              >
-                {info.title}
-              </h3>
-
-              <p>{info.description}</p>
-              <div
-                className={`mx-auto w-[60%] sm:w-[70%] py-3 text-center ${
-                  isHovered ? "font-bold" : ""
-                } `}
-              >
-                <button
-                  className={`mt-1 px-4 py-1 rounded-md ${
+              <Link href={"/items"}>
+                <div className=" py-2 mt-3 flex flex-col justify-center items-center z-10 top-0 left-[50%]">
+                  <Image
+                    className="flex flex-col justify-center items-center relative z-10"
+                    src={info.image}
+                    alt="cooking image"
+                    width={100}
+                    height={100}
+                  />
+                </div>
+                <div
+                  className={`absolute top-0 left-[55%] w-[6rem] h-[6rem] mt-2 rounded-full  z-0 flex justify-center items-center ${
                     isHovered
-                      ? "bg-customWhite text-primary font-bold"
+                      ? "bg-customWhite text-primary"
                       : "bg-primary text-customWhite"
                   }`}
                 >
-                  {info.btnText}
-                </button>
-              </div>
+                  <h3
+                    className={` text-35 font-bold ${
+                      isHovered ? "bg-customWhite text-primary" : ""
+                    }`}
+                  >
+                    {index + 1}
+                  </h3>
+                </div>
+
+                <h3
+                  className={`text-20 font-bold py-4 text-center ${
+                    isHovered ? "text-customWhite" : "text-secondary"
+                  }`}
+                >
+                  {info.title}
+                </h3>
+
+                <p>{info.description}</p>
+                <div
+                  className={`mx-auto w-[60%] sm:w-[70%] py-3 text-center ${
+                    isHovered ? "font-bold" : ""
+                  } `}
+                >
+                  <button
+                    className={`mt-1 px-4 py-1 rounded-md ${
+                      isHovered
+                        ? "bg-customWhite text-primary font-bold"
+                        : "bg-primary text-customWhite"
+                    }`}
+                  >
+                    {info.btnText}
+                  </button>
+                </div>
+              </Link>
             </div>
           );
         })}

@@ -3,6 +3,7 @@ import Button from "../overall/Button";
 import Image from "next/image";
 import deliveryMan from "@/images/home/food 1.png";
 import deliverImage from "@/images/home/image_delivery.png";
+import Link from "next/link";
 
 const Delivery = () => {
   return (
@@ -39,7 +40,9 @@ const Delivery = () => {
                 />
               </div>
             </div>
-            <Button>Order</Button>
+            <Button>
+              <Link href={"/items"}>Order</Link>
+            </Button>
           </div>
         </div>
         <div className="w-[90%] md:w-[40%] h-[100%] mx-auto">

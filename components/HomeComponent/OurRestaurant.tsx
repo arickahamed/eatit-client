@@ -5,6 +5,7 @@ import growthRestaurant from "@/images/home/our-restaurant/growth 1.png";
 import ourResturant1 from "@/images/home/our-restaurant/image_ourResturant_1.png";
 import ourResturant2 from "@/images/home/our-restaurant/image_ourResturant_2.png";
 import ourResturant3 from "@/images/home/our-restaurant/image_ourResturant_3.png";
+import Link from "next/link";
 
 const OurRestaurant = () => {
   return (
@@ -35,7 +36,7 @@ const OurRestaurant = () => {
                   obligations of business it will frequently.
                 </p>
                 <button className="transition ease-in-out duration-300 delay-150 min-w-[40%] py-2 px-4 rounded-lg bg-primary text-customWhite hover:bg-customWhite hover:text-primary hover:border hover:border-primary hover:font-bold mt-2 mb-3">
-                  Read More
+                  <Link href={"/about"}>Read More</Link>
                 </button>
               </div>
             </div>
@@ -52,7 +53,7 @@ const OurRestaurant = () => {
                   obligations of business it will frequently.
                 </p>
                 <button className="transition ease-in-out duration-300 delay-150 min-w-[40%] py-2 px-4 rounded-lg bg-primary text-customWhite hover:bg-customWhite hover:text-primary hover:border hover:border-primary hover:font-bold mt-2 mb-3">
-                  Read More
+                  <Link href={"/about"}>Read More</Link>
                 </button>
               </div>
             </div>

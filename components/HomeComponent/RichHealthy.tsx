@@ -4,6 +4,7 @@ import { FaStar } from "react-icons/fa";
 import image1 from "@/images/home/rich_healthy/image_richHealthy_1.png";
 import image2 from "@/images/home/rich_healthy/image_richHealthy_2.png";
 import Image from "next/image";
+import Link from "next/link";
 
 const RichHealthy = () => {
   return (
@@ -36,7 +37,9 @@ const RichHealthy = () => {
                   <p>Able to do what we like best</p>
                 </div>
               </div>
-              <Button>Read More</Button>
+              <Button>
+                <Link href={'/items'}>Read More</Link>
+              </Button>
             </div>
             <div className="w-[48%]">
               {/* small image is here */}
