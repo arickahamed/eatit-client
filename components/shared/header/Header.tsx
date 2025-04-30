@@ -13,6 +13,8 @@ import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { clearAuthData } from "@/lib/redux/features/auth/authSlice";
 import { persistor } from "@/lib/redux/store";
 import { useHeaderData } from "./HeaderData";
+import { IoCartOutline } from "react-icons/io5";
+
 
 const Header = () => {
   const router = useRouter();
@@ -29,20 +31,23 @@ const Header = () => {
 
   const user = useAppSelector((state) => state.auth);
 
-   const dispatch = useAppDispatch();
-   const HeaderData = useHeaderData();
+  const dispatch = useAppDispatch();
+  const HeaderData = useHeaderData();
 
+  //  cart item
+  const cartProducts = useAppSelector((state) => state.cartProducts);
+  console.log(cartProducts);
 
-   const handleLogout = async () => {
-     try {
-       dispatch(clearAuthData());
-       await persistor.purge(); // Purge the storage
-       localStorage.removeItem("user");
-       console.log("Logout successful: State purged");
-     } catch (error) {
-       console.error("Error during logout: ", error);
-     }
-   };
+  const handleLogout = async () => {
+    try {
+      dispatch(clearAuthData());
+      await persistor.purge(); // Purge the storage
+      localStorage.removeItem("user");
+      console.log("Logout successful: State purged");
+    } catch (error) {
+      console.error("Error during logout: ", error);
+    }
+  };
 
   const isActive = (href: string) => pathName == href;
 
@@ -123,6 +128,24 @@ const Header = () => {
             >
               eat<span className="text-secondary">it</span>{" "}
             </div>
+
+            {/* cart icon for mobile view */}
+            <Link href="/cart">
+              <div className="block md:hidden lg:hidden cursor-pointer">
+                {cartProducts?.cartItems?.length ? (
+                  openNav ? null : (
+                    <div className="flex relative w-fit">
+                      <div className="text-[25px]">
+                        <IoCartOutline />{" "}
+                      </div>
+                      <div className="absolute -top-2 -right-2 bg-red-500 text-white text-[12px] w-5 h-5 flex items-center justify-center rounded-full">
+                        {cartProducts?.cartItems?.length}
+                      </div>{" "}
+                    </div>
+                  )
+                ) : null}
+              </div>
+            </Link>
             <div
               onClick={() => {
                 if (openNav) {
@@ -152,7 +175,19 @@ const Header = () => {
                     }}
                     href={info.pathName}
                   >
-                    {info.name}
+                    {info?.name == "Cart" ? (
+                      <div className="relative w-fit">
+                        {" "}
+                        <div>{info.name}</div>{" "}
+                        {cartProducts?.cartItems?.length > 0 && (
+                          <div className="absolute -top-2 -right-4 md:-top-3 md:-right-4 bg-red-500 text-white text-[15px] md:text-[12px] w-6 h-6 md:w-5 md:h-5 flex items-center justify-center rounded-full">
+                            {cartProducts.cartItems.length}
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      info.name
+                    )}
                   </Link>
                 );
               })}

@@ -20,9 +20,9 @@ const OurTeam = () => {
             </p>
           </div>
           <div className="pt-4 w-[90%] flex flex-col md:flex-row md:justify-evenly mx-auto">
-            {TeamMemberInfo.map((member) => {
+            {TeamMemberInfo.map((member, index) => {
               return (
-                <div className="max-w-[80%] mt-7 flex flex-col justify-center items-center md:block mx-auto relative">
+                <div className="max-w-[80%] mt-7 flex flex-col justify-center items-center md:block mx-auto relative" key={index}>
                   <div className="border border-primary flex flex-col justify-end items-center p-10 w-[80%] sm:w-[70%] md:w-[85%] rounded-full">
                     <h3 className="text-25 text-primary font-bold">
                       {member.name}

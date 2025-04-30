@@ -26,6 +26,7 @@ const WeAreBest = () => {
               }`}
               onMouseEnter={() => handleMouseEnter(index)}
               onMouseLeave={handleMouseLeave}
+              key={index}
             >
               <Link href={"/items"}>
                 <div className=" py-2 mt-3 flex flex-col justify-center items-center z-10 top-0 left-[50%]">

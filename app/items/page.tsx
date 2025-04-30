@@ -119,8 +119,8 @@ const clickAddToCart = (
           ))}
         </div>
         <div className="mb-7 flex flex-col flex-wrap md:flex-row lg:flex-row items-center justify-around my-2 py-2">
-          {filteredProducts.map((product: any) => (
-            <div className="border border-slate-300 cursor-pointer rounded-md shadow-md w-[80%] md:w-[30%] lg:w-[30%] my-2 py-2 px-3">
+          {filteredProducts.map((product: any, index) => (
+            <div className="border border-slate-300 cursor-pointer rounded-md shadow-md w-[80%] md:w-[30%] lg:w-[30%] my-2 py-2 px-3" key={index}>
               <Link
                 href={`/items/${product.id}`}
                 onClick={(e) => e.stopPropagation()}
