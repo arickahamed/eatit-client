@@ -4,7 +4,7 @@ import registerHeroImage from "./registerImage/hero-login.png";
 import HeroSection from '@/components/shared/HeroSection';
 import Link from 'next/link';
 import ScrollUp from '@/components/shared/ScrollUp';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { toast, ToastContainer } from 'react-toastify';
 import ShowToast from '@/components/shared/ShowToast';
 import axios from 'axios';
@@ -12,6 +12,8 @@ import axios from 'axios';
 
 const Register = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get("redirect");
   const [role, setRole] = useState("user");
   const [response, setResponse] = useState(null);
   // handling the form data
@@ -48,7 +50,7 @@ const Register = () => {
               role:"user"
             });
           setTimeout(() => {
-            router.push("/login");
+            router.push(redirect || "/login");
           }, 2000);
         } catch (err) {
           console.log("something  went wrong");

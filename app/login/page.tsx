@@ -5,7 +5,7 @@ import HeroSection from '@/components/shared/HeroSection';
 import Link from 'next/link';
 import ScrollUp from '../../components/shared/ScrollUp';
 import ShowToast from '@/components/shared/ShowToast';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { ToastContainer } from 'react-toastify';
 import axios from 'axios';
 import { setWithExpiry } from '@/utils/localStorage';
@@ -19,6 +19,8 @@ interface User {
 
 const login = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get("redirect");
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [userRole, setUserRole] = useState<string | null>(null);
   const [localStorageKey, setLocalStorageKey] = useState(0);
@@ -72,8 +74,9 @@ const login = () => {
             password: "",
           });
           setTimeout(() => {
-            router.push("/");
-          }, 2000);
+            router.push(redirect || "/");
+            // here will be redirect router
+          }, 1000);
         } else {
           ShowToast({ type: "error", message: data.message });
           console.log(data);
@@ -82,9 +85,6 @@ const login = () => {
         console.log("something  went wrong");
         ShowToast({ type: "error", message: "Fill the form correctly!" });
       }
-      setTimeout(() => {
-        router.push("/");
-      }, 2000);
     } else {
       ShowToast({ type: "error", message: "Fill the form correctly!" });
     }
@@ -137,7 +137,10 @@ const login = () => {
       </div>
       <p className="text-center p-3">
         Don't have a account?{" "}
-        <Link className={`text-primary hover:text-orange-500`} href="/Register">
+        <Link
+          className={`text-primary hover:text-orange-500`}
+          href={`/Register?redirect=/orderHandler`}
+        >
           Register
         </Link>
       </p>

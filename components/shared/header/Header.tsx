@@ -14,6 +14,8 @@ import { clearAuthData } from "@/lib/redux/features/auth/authSlice";
 import { persistor } from "@/lib/redux/store";
 import { useHeaderData } from "./HeaderData";
 import { IoCartOutline } from "react-icons/io5";
+import { BsBag } from "react-icons/bs";
+
 
 
 const Header = () => {
@@ -30,13 +32,16 @@ const Header = () => {
   };
 
   const user = useAppSelector((state) => state.auth);
+  const role = user.role;
+  const admin = "admin" == role;
 
   const dispatch = useAppDispatch();
   const HeaderData = useHeaderData();
 
   //  cart item
   const cartProducts = useAppSelector((state) => state.cartProducts);
-  console.log(cartProducts);
+  const orderPlaced = cartProducts.orderPlaced;
+  // console.log(cartProducts);
 
   const handleLogout = async () => {
     try {
@@ -130,10 +135,17 @@ const Header = () => {
             </div>
 
             {/* cart icon for mobile view */}
-            <Link href="/cart">
+            <Link href={`${admin ? "/orders": "/cart"}`}>
               <div className="block md:hidden lg:hidden cursor-pointer">
                 {cartProducts?.cartItems?.length ? (
-                  openNav ? null : (
+                  openNav ? null : orderPlaced && admin ? <div className="flex relative w-fit">
+                      <div className="text-[25px]">
+                        <BsBag />{" "}
+                      </div>
+                      <div className="absolute -top-2 -right-2 bg-red-500 text-white text-[12px] w-5 h-5 flex items-center justify-center rounded-full">
+                        {cartProducts?.cartItems?.length}
+                      </div>{" "}
+                    </div>  : (
                     <div className="flex relative w-fit">
                       <div className="text-[25px]">
                         <IoCartOutline />{" "}
@@ -179,11 +191,11 @@ const Header = () => {
                       <div className="relative w-fit">
                         {" "}
                         <div>{info.name}</div>{" "}
-                        {cartProducts?.cartItems?.length > 0 && (
-                          <div className="absolute -top-2 -right-4 md:-top-3 md:-right-4 bg-red-500 text-white text-[15px] md:text-[12px] w-6 h-6 md:w-5 md:h-5 flex items-center justify-center rounded-full">
-                            {cartProducts.cartItems.length}
-                          </div>
-                        )}
+                        {cartProducts?.cartItems?.length > 0 &&
+                            <div className="absolute -top-2 -right-4 md:-top-3 md:-right-4 bg-red-500 text-white text-[15px] md:text-[12px] w-6 h-6 md:w-5 md:h-5 flex items-center justify-center rounded-full">
+                              {cartProducts.cartItems.length}
+                            </div>
+                          }
                       </div>
                     ) : (
                       info.name

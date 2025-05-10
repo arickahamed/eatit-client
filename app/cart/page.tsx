@@ -8,8 +8,12 @@ import { useDispatch } from "react-redux";
 import { setCartClear, setCartData } from "@/lib/redux/features/cart/cartSlice";
 import { MdAdd } from "react-icons/md";
 import { GrFormSubtract } from "react-icons/gr";
+import { useRouter } from "next/navigation";
+import axios from "axios";
+import ShowToast from "@/components/shared/ShowToast";
 
-const about = () => {
+const cart = () => {
+  const router = useRouter();
   const dispatch = useDispatch();
   const heroInfo = {
     img: heroImage,
@@ -18,6 +22,12 @@ const about = () => {
   };
   const cartProducts = useAppSelector((state) => state.cartProducts);
   const cartItems = cartProducts.cartItems;
+  const orderPlaced = cartProducts.orderPlaced;
+  // console.log(orderPlaced);
+
+  const user = useAppSelector((state) => state.auth);
+  const email = user.email;
+  // console.log(email);
 
   const total = cartItems?.reduce(
     (sum, product) => sum + product.price * product.quantity,
@@ -50,6 +60,32 @@ const about = () => {
 
     dispatch(setCartData(updatedCart));
   };
+
+  const handleConfirmOrder = async() => {
+    const orderedData = {email, cartItems, total};
+    if(email) {
+      console.log(email);
+      try {
+        const res = await axios.post(
+          "http://localhost:8080/api/v1/users/confirmOrder",
+          orderedData
+        );
+        if(res.data.success) {
+          dispatch(setCartClear());
+          router.push("/success");
+          ShowToast({ type: "success", message: "Order placed" });
+        }else {
+          console.log("error in orderd in cart page");
+          ShowToast({ type: "error", message: "Some issues occur" });
+        }
+      } catch (error) {
+        console.error("Order failed:", error);
+      }
+    }else {
+      router.push("/login?redirect=/orderHandler");
+    }
+  }
+  console.log(orderPlaced);
   return (
     <main className="w-full">
       <HeroSection data={heroInfo} />
@@ -71,7 +107,7 @@ const about = () => {
                 ${product.price * product.quantity}
               </span>
             </div>
-            <div className="flex">
+            <div className={`${orderPlaced ? "hidden" : "flex"}`}>
               <button
                 className="bg-gradient-to-r from-green-500 to-green-700 text-white rounded-md p-1"
                 onClick={() => clickAddToCart(product.id)}
@@ -97,20 +133,48 @@ const about = () => {
 
       <hr className="text-green-600" />
       {cartItems?.length > 0 ? (
-        <div className="w-[80%] mx-auto my-3 p-2 bg-slate-200 rounded-md text-center font-semibold text-lg">
+        <div className="w-[80%] mx-auto my-3 p-2 bg-slate-200 rounded-md text-center font-semibold text-lg md:flex lg:flex items-center justify-evenly block">
+          <button
+            className={`hidden md:block lg:block border border-slate-400 rounded-md px-2 py-1`}
+            onClick={handleClearAll}
+          >
+            Cancel Order
+          </button>
           <p>
             Payable Total = <span className="font-semibold"> {total} </span>{" "}
           </p>
+          <button
+            className={`hidden md:block lg:block border border-slate-400 rounded-md px-2 py-1 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-white hover:to-white hover:border-blue-700 transition shadow-md ease-in-out delay-100 text-customWhite hover:text-blue-700`}
+            onClick={() => handleConfirmOrder()}
+          >
+            Place Order
+          </button>
         </div>
       ) : null}
-
       {cartItems.length && (
-        <button className="mx-auto border border-slate-400 rounded-md px-2 py-1 block" onClick={handleClearAll}>Clear All Data</button>
+        <div
+          className={`md:hidden lg:hidden flex justify-evenly items-center w-[80%] mx-auto`}
+        >
+          <button
+            className="border border-slate-400 rounded-md px-2 py-1"
+            onClick={handleClearAll}
+          >
+            Cancel Order
+          </button>
+          <button
+            className="border border-slate-400 rounded-md px-2 py-1 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-white hover:to-white hover:border-blue-700 transition shadow-md ease-in-out delay-100 text-customWhite hover:text-blue-700"
+            onClick={() => handleConfirmOrder()}
+          >
+            Place Order
+          </button>
+        </div>
       )}
+
+      <p onClick={() => handleClearAll()}>c</p>
 
       <ScrollUp />
     </main>
   );
 };
 
-export default about;
+export default cart;

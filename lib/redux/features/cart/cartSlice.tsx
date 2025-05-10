@@ -11,10 +11,12 @@ export interface ICartSlice {
 
 interface ICartState {
   cartItems: ICartSlice[];
+  orderPlaced: boolean;
 }
 
 const initialState: ICartState = {
   cartItems: [],
+  orderPlaced:false
 };
 
 export const cartSlice = createSlice({
@@ -24,12 +26,15 @@ export const cartSlice = createSlice({
     setCartData: (state, action: PayloadAction<ICartSlice[]>) => {
       state.cartItems = action.payload;
     },
+    setOrderPlaced: (state, action: PayloadAction<boolean>) => {
+    state.orderPlaced = action.payload;
+  },
     setCartClear: (state) => {
       state.cartItems = [];
     },
   },
 });
 
-export const { setCartData, setCartClear } = cartSlice.actions;
+export const { setCartData, setOrderPlaced, setCartClear } = cartSlice.actions;
 
 export default cartSlice.reducer;

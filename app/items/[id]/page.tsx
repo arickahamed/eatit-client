@@ -22,6 +22,10 @@ const page = () => {
   const gotFood = products.filter(product => product.id === id);
   const food = gotFood[0];
 
+  const user = useAppSelector((state) => state.auth);
+  const role = user.role;
+  const admin = "admin" == role;
+
 const heroInfo = {
     img: heroImage,
     title: "Food For You",
@@ -81,7 +85,7 @@ const heroInfo = {
           </div>
           <button
             onClick={(e) => clickAddToCart(e)}
-            className={`block w-[70%] lg:w-[50%] mx-auto hover:bg-customWhite hover:text-primary border-red-600 bg-primary text-customWhite border  mt-4 mb-2 py-2 px-4 rounded-md shadow-md transition ease-in-out delay-150`}
+            className={`block w-[70%] lg:w-[50%] mx-auto hover:bg-customWhite hover:text-primary border-red-600 bg-primary text-customWhite border  mt-4 mb-2 py-2 px-4 rounded-md shadow-md transition ease-in-out delay-150 ${admin ? "hidden": ""}`}
           >
             Add to Cart
           </button>

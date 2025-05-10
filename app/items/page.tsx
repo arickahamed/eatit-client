@@ -15,6 +15,9 @@ import { setCartData } from "@/lib/redux/features/cart/cartSlice";
 const about = () => { 
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const dispatch = useDispatch();
+  const user = useAppSelector((state) => state.auth);
+  const role = user.role;
+  const admin = "admin" == role;
   const previouslyAddedCartProduct = useAppSelector(
     (state) => state.cartProducts.cartItems || []
   );
@@ -141,7 +144,7 @@ const clickAddToCart = (
                     e.stopPropagation();
                     clickAddToCart(e, product.id);
                   }}
-                  className={`block w-[70%] lg:w-[50%] mx-auto hover:bg-customWhite hover:text-primary border-red-600 bg-primary text-customWhite border  mt-4 mb-2 py-2 px-4 rounded-md shadow-md transition ease-in-out delay-150`}
+                  className={`block w-[70%] lg:w-[50%] mx-auto hover:bg-customWhite hover:text-primary border-red-600 bg-primary text-customWhite border  mt-4 mb-2 py-2 px-4 rounded-md shadow-md transition ease-in-out delay-150 ${admin ? "hidden" : ""}`}
                 >
                   Add to Cart
                 </button>
