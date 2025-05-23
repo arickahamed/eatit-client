@@ -25,6 +25,7 @@ const login = () => {
   const [userRole, setUserRole] = useState<string | null>(null);
   const [localStorageKey, setLocalStorageKey] = useState(0);
   const dispatch = useAppDispatch();
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   const updateEmailFromStorage = () => {
       const stringifyUser = getWithExpiry("user");
@@ -61,7 +62,7 @@ const login = () => {
       };
       try {
         const res = await axios.post(
-          "http://localhost:8080/api/v1/users/login",
+          `${API_URL}/api/v1/users/login`,
           collectedData
         );
         const data = res.data;

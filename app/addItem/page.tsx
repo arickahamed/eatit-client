@@ -50,6 +50,9 @@ const addItem = () => {
     }
   };
 
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
+
   const handleSubmit = async (event: any) => {
     event.preventDefault();
 
@@ -64,7 +67,7 @@ const addItem = () => {
 
       try {
         const res = await axios.post(
-          "http://localhost:8080/api/v1/products/createProduct",
+          `${API_URL}/api/v1/products/createProduct`,
           formDataToSend,
           {
             headers: {

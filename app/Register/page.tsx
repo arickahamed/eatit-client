@@ -24,6 +24,9 @@ const Register = () => {
     role: role
   });
 
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
+
   const onOptionChange = (e: any) => {
     setRole(e.target.value);
   };
@@ -41,7 +44,10 @@ const Register = () => {
     if (formData.email.length > 5 && formData.password.length > 4 && formData.rePassword && formData.password === formData.rePassword) {
       const collectedData = {email: formData.email, password: formData.password, role: role};
         try {
-          const res = await axios.post("http://localhost:8080/api/v1/users/register", collectedData);
+          const res = await axios.post(
+            `${API_URL}/api/v1/users/register`,
+            collectedData
+          );
           ShowToast({ type: "success", message: res.data.message });
             setFormData({
               email: "",

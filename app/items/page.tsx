@@ -21,19 +21,22 @@ const about = () => {
   const previouslyAddedCartProduct = useAppSelector(
     (state) => state.cartProducts.cartItems || []
   );
+
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
   
     useEffect(() => {
     const fetchProducts = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8080/api/v1/products/getAllProducts"
+          `${API_URL}/api/v1/products/getAllProducts`
         );
         const data = response.data;
         if(data.success) {
           const formattedData = data.data.map((product: any) => ({
             ...product,
-            image: `http://localhost:8080${product.imageURL}`,
-            id: product._id
+            image: `${API_URL}${product.imageURL}`,
+            id: product._id,
           }));
           dispatch(setProductsData(formattedData));
         }else {

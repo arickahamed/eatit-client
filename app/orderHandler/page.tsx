@@ -16,6 +16,9 @@ const orderHandler = () => {
     0
   );
 
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
+
   useEffect(() => {
     const placeOrder = async () => {
       if (!email) return router.push("/login?redirect=/orderHandler");
@@ -23,7 +26,7 @@ const orderHandler = () => {
       try {
         
         const res = await axios.post(
-          "http://localhost:8080/api/v1/users/confirmOrder",
+          `${API_URL}/api/v1/users/confirmOrder`,
           orderedData
         );
         if(res.data.success) {

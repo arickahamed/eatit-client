@@ -35,6 +35,9 @@ const cart = () => {
   );
   // console.log(total);
 
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
+
   // console.log(cartItems);
   const handleClearAll = () => {
     dispatch(setCartClear());
@@ -67,7 +70,7 @@ const cart = () => {
       console.log(email);
       try {
         const res = await axios.post(
-          "http://localhost:8080/api/v1/users/confirmOrder",
+          `${API_URL}/api/v1/users/confirmOrder`,
           orderedData
         );
         if(res.data.success) {
@@ -170,7 +173,7 @@ const cart = () => {
         </div>
       )}
 
-      <p onClick={() => handleClearAll()}>c</p>
+      {/* <p onClick={() => handleClearAll()}>c</p> */}
 
       <ScrollUp />
     </main>
