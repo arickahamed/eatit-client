@@ -61,6 +61,11 @@ export const useHeaderData = (): IHeaderData[] => {
         name: "Cart",
         pathName: "/cart",
       },
+      {
+        id: 5,
+        name: "My Orders",
+        pathName: "/myOrders",
+      },
     ];
   }
 };

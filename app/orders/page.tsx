@@ -19,7 +19,7 @@ const orders = () => {
   return (
     <main className="">
       <HeroSection data={heroInfo} />
-      <p>all orders are here</p>
+      <p>My orders are here</p>
       <ScrollUp />
     </main>
   );
