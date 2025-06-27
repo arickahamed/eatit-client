@@ -21,8 +21,6 @@ const login = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirect = searchParams.get("redirect");
-  const [userEmail, setUserEmail] = useState<string | null>(null);
-  const [userRole, setUserRole] = useState<string | null>(null);
   const [localStorageKey, setLocalStorageKey] = useState(0);
   const dispatch = useAppDispatch();
   const API_URL = process.env.NEXT_PUBLIC_API_URL;

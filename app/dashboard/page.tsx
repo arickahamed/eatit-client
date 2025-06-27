@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React from "react";
 import heroImage from "@/app/about/about_images/hero_about-bg.png";
 
 import HeroSection from "@/components/shared/HeroSection";

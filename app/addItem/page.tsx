@@ -31,6 +31,8 @@ const addItem = () => {
     formData.category !== "select" &&
     formData.image !== null;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   const handleInputChange = (event: any) => {
     const { name, value } = event.target;
 
@@ -51,7 +53,6 @@ const addItem = () => {
   };
 
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
-
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();
@@ -86,8 +87,8 @@ const addItem = () => {
             quantity: NaN,
             image: null,
           });
-        }else {
-          ShowToast({type: "error", message: data.message})
+        } else {
+          ShowToast({ type: "error", message: data.message });
         }
       } catch (error) {
         console.error(

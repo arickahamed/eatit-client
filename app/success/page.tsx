@@ -4,7 +4,6 @@ import heroImage from "@/app/about/about_images/hero_about-bg.png";
 
 import HeroSection from "@/components/shared/HeroSection";
 import ScrollUp from "@/components/shared/ScrollUp";
-import { useAppSelector } from "@/lib/redux/hooks";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { setOrderPlaced } from "@/lib/redux/features/cart/cartSlice";

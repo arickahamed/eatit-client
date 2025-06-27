@@ -1,12 +1,11 @@
 "use client"
-import React, { Suspense } from "react";
+import React from "react";
 import heroImage from "./about_images/hero_about-bg.png";
 import OurStory from "./OurStory";
 import OurChef from "./OurChef";
 import SpecialService from "./SpecialService";
 import HeroSection from "@/components/shared/HeroSection";
 import OurTeam from "./OurTeam";
-import ScrollToTop from "react-scroll-to-top";
 import ScrollUp from "@/components/shared/ScrollUp";
 
 const about = () => {

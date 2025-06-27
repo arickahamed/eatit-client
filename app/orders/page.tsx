@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import heroImage from "@/app/about/about_images/hero_about-bg.png";
 import HeroSection from "@/components/shared/HeroSection";
 import ScrollUp from "@/components/shared/ScrollUp";

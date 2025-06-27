@@ -5,7 +5,7 @@ import HeroSection from '@/components/shared/HeroSection';
 import Link from 'next/link';
 import ScrollUp from '@/components/shared/ScrollUp';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { toast, ToastContainer } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import ShowToast from '@/components/shared/ShowToast';
 import axios from 'axios';
 
@@ -15,17 +15,17 @@ const Register = () => {
   const searchParams = useSearchParams();
   const redirect = searchParams.get("redirect");
   const [role, setRole] = useState("user");
-  const [response, setResponse] = useState(null);
   // handling the form data
   const [formData, setFormData] = useState({
     email: "",
     password: "",
     rePassword: "",
-    role: role
+    role: role,
   });
 
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 
   const onOptionChange = (e: any) => {
     setRole(e.target.value);
@@ -39,29 +39,38 @@ const Register = () => {
     }));
   };
 
-  const handleSubmit = async(event: any) => {
+  const handleSubmit = async (event: any) => {
     event.preventDefault();
-    if (formData.email.length > 5 && formData.password.length > 4 && formData.rePassword && formData.password === formData.rePassword) {
-      const collectedData = {email: formData.email, password: formData.password, role: role};
-        try {
-          const res = await axios.post(
-            `${API_URL}/api/v1/users/register`,
-            collectedData
-          );
-          ShowToast({ type: "success", message: res.data.message });
-            setFormData({
-              email: "",
-              password: "",
-              rePassword: "",
-              role:"user"
-            });
-          setTimeout(() => {
-            router.push(redirect || "/login");
-          }, 2000);
-        } catch (err) {
-          console.log("something  went wrong");
-          ShowToast({ type: "error", message: "Fill the form correctly!" });
-        }
+    if (
+      formData.email.length > 5 &&
+      formData.password.length > 4 &&
+      formData.rePassword &&
+      formData.password === formData.rePassword
+    ) {
+      const collectedData = {
+        email: formData.email,
+        password: formData.password,
+        role: role,
+      };
+      try {
+        const res = await axios.post(
+          `${API_URL}/api/v1/users/register`,
+          collectedData
+        );
+        ShowToast({ type: "success", message: res.data.message });
+        setFormData({
+          email: "",
+          password: "",
+          rePassword: "",
+          role: "user",
+        });
+        setTimeout(() => {
+          router.push(redirect || "/login");
+        }, 2000);
+      } catch (err) {
+        console.log("something  went wrong");
+        ShowToast({ type: "error", message: "Fill the form correctly!" });
+      }
     } else {
       ShowToast({ type: "error", message: "Fill the form correctly!" });
     }
@@ -106,28 +115,28 @@ const Register = () => {
           />
           <br />
           <div className="flex items-center justify-center mx-auto">
-            <h3 className='mr-1'>role: </h3>
-              <input
-                className='mx-1'
-                type="radio"
-                name="role"
-                value="user"
-                id="user"
-                checked={role === "user"}
-                onChange={onOptionChange}
-              />
-              <label className='mr-2'>user</label>
+            <h3 className="mr-1">role: </h3>
+            <input
+              className="mx-1"
+              type="radio"
+              name="role"
+              value="user"
+              id="user"
+              checked={role === "user"}
+              onChange={onOptionChange}
+            />
+            <label className="mr-2">user</label>
 
-              <input
-                className='mx-1'
-                type="radio"
-                name="role"
-                value="admin"
-                id="admin"
-                checked={role === "admin"}
-                onChange={onOptionChange}
-              />
-              <label>admin</label>
+            <input
+              className="mx-1"
+              type="radio"
+              name="role"
+              value="admin"
+              id="admin"
+              checked={role === "admin"}
+              onChange={onOptionChange}
+            />
+            <label>admin</label>
           </div>
           <br />
           <button

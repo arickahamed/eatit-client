@@ -3,6 +3,8 @@
 import React from "react";
 import { GoogleMap, useLoadScript, Marker } from "@react-google-maps/api";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+
 const libraries: any = ["places"];
 const mapContainerStyle = {
   minWidth: "300px",

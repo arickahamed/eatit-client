@@ -1,7 +1,6 @@
 "use client";
 import Image from "next/image";
 import React, { useState } from "react";
-import Button from "../overall/Button";
 import { WeAreBestData } from "@/data/WeAreBestData";
 import Link from "next/link";
 

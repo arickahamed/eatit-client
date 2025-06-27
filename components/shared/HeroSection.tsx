@@ -1,8 +1,5 @@
-import { setProductsData } from "@/lib/redux/features/products/productsSlice";
-import axios from "axios";
 import Image, { StaticImageData } from "next/image";
-import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import React from "react";
 
 interface HeroSectionProps {
   data: {

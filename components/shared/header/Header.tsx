@@ -24,7 +24,7 @@ const Header = () => {
   const router = useRouter();
   const pathName = usePathname();
   const [openNav, setOpenNav] = useState(false);
-  const [orders, setOrders] = useState([]);
+  // const [orders, setOrders] = useState([]);
   // console.log(orders.length);
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     if (window.scrollY > 5) {
@@ -35,7 +35,7 @@ const Header = () => {
     }
   };
 
-  const previousOrderCountRef = useRef(0);
+  // const previousOrderCountRef = useRef(0);
   const user = useAppSelector((state) => state.auth);
   const role = user.role;
   const admin = "admin" == role;
@@ -48,7 +48,7 @@ const Header = () => {
 
   //  cart item
   const cartProducts = useAppSelector((state) => state.cartProducts);
-  const orderPlaced = cartProducts.orderPlaced;
+  // const orderPlaced = cartProducts.orderPlaced;
   // console.log(cartProducts);
 
   const handleLogout = async () => {

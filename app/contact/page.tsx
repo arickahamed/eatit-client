@@ -14,7 +14,6 @@ import { MdEmail } from "react-icons/md";
 import { FaClock } from "react-icons/fa6";
 import Link from "next/link";
 import Map from "./Map";
-import ScrollToTop from "react-scroll-to-top";
 import ScrollUp from "@/components/shared/ScrollUp";
 
 const Contact = () => {
