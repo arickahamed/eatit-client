@@ -11,6 +11,7 @@ import { GrFormSubtract } from "react-icons/gr";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import ShowToast from "@/components/shared/ShowToast";
+import Link from "next/link";
 
 const cart = () => {
   const router = useRouter();
@@ -67,7 +68,7 @@ const cart = () => {
   const handleConfirmOrder = async() => {
     const orderedData = {email, cartItems, total};
     if(email) {
-      console.log(email);
+      // console.log(email);
       try {
         const res = await axios.post(
           `${API_URL}/api/v1/users/confirmOrder`,
@@ -88,7 +89,7 @@ const cart = () => {
       router.push("/login?redirect=/orderHandler");
     }
   }
-  console.log(orderPlaced);
+  // console.log(orderPlaced);
   return (
     <main className="w-full">
       <HeroSection data={heroInfo} />
@@ -130,7 +131,7 @@ const cart = () => {
         <div className="text-center my-4 text-lg">
           No Product Added.
           <br />
-          Want to add product?
+          <Link href="/items" className="underline">Want to have a meal Items ?</Link>
         </div>
       )}
 

@@ -11,7 +11,7 @@ import ShowToast from "@/components/shared/ShowToast";
 
 const orders = () => {
     const [finalMyOrders, setFinalMyOrders] = useState([]);
-    console.log(finalMyOrders);
+    // console.log(finalMyOrders);
     const user = useAppSelector((state) => state.auth);
     const heroInfo = {
     img: heroImage,
@@ -43,9 +43,9 @@ const orders = () => {
       fetchMyOrders();
     }, []);
   
-    {finalMyOrders.map(order => {
-        console.log(order)
-    })}
+    // {finalMyOrders.map(order => {
+    //     console.log(order)
+    // })}
 
   return (
     <main className="">

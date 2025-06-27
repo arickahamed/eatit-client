@@ -5,7 +5,7 @@ import phoneIcon from "@/images/header/phone_icon.png";
 import Image from "next/image";
 import { HiMenuAlt3 } from "react-icons/hi";
 import { RxCross2 } from "react-icons/rx";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Button from "../../overall/Button";
 import "./Header.css";
@@ -15,6 +15,8 @@ import { persistor } from "@/lib/redux/store";
 import { useHeaderData } from "./HeaderData";
 import { IoCartOutline } from "react-icons/io5";
 import { BsBag } from "react-icons/bs";
+import OrderPolling from "@/components/global/OrderPolling";
+import { setNewOrderCount } from "@/lib/redux/features/admin/adminSlice";
 
 
 
@@ -22,6 +24,8 @@ const Header = () => {
   const router = useRouter();
   const pathName = usePathname();
   const [openNav, setOpenNav] = useState(false);
+  const [orders, setOrders] = useState([]);
+  // console.log(orders.length);
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     if (window.scrollY > 5) {
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -31,12 +35,16 @@ const Header = () => {
     }
   };
 
+  const previousOrderCountRef = useRef(0);
   const user = useAppSelector((state) => state.auth);
   const role = user.role;
   const admin = "admin" == role;
 
   const dispatch = useAppDispatch();
   const HeaderData = useHeaderData();
+
+  // admin -- new order count reset on clicking the order nav
+  
 
   //  cart item
   const cartProducts = useAppSelector((state) => state.cartProducts);
@@ -56,6 +64,7 @@ const Header = () => {
 
   const isActive = (href: string) => pathName == href;
 
+
   useEffect(() => {
     if (openNav) {
       document.body.style.overflow = "hidden";
@@ -68,9 +77,14 @@ const Header = () => {
     };
   }, [openNav]);
 
+     const adminOrders = useAppSelector((state) => state.adminData);
+  console.log(adminOrders.newOrderCount);
+
   return (
     <section>
       <main>
+        {/* for the orders of the user to show it to the admin */}
+        {admin && <OrderPolling />}
         {/* top section */}
         <div className="bg-primary text-customWhite text-[8px] sm:text-12 md:text-12 lg:text-12">
           <div className="text-12 p-2 w-[90%] m-auto flex justify-between items-center">
@@ -135,17 +149,19 @@ const Header = () => {
             </div>
 
             {/* cart icon for mobile view */}
-            <Link href={`${admin ? "/orders": "/cart"}`}>
+            {/* <Link href={admin ? "/orders" : "/cart"}>
               <div className="block md:hidden lg:hidden cursor-pointer">
                 {cartProducts?.cartItems?.length ? (
-                  openNav ? null : orderPlaced && admin ? <div className="flex relative w-fit">
+                  openNav ? null : orderPlaced && admin ? (
+                    <div className="flex relative w-fit">
                       <div className="text-[25px]">
                         <BsBag />{" "}
                       </div>
                       <div className="absolute -top-2 -right-2 bg-red-500 text-white text-[12px] w-5 h-5 flex items-center justify-center rounded-full">
                         {cartProducts?.cartItems?.length}
                       </div>{" "}
-                    </div>  : (
+                    </div>
+                  ) : (
                     <div className="flex relative w-fit">
                       <div className="text-[25px]">
                         <IoCartOutline />{" "}
@@ -157,7 +173,46 @@ const Header = () => {
                   )
                 ) : null}
               </div>
+            </Link> */}
+            <Link
+              href={admin ? "/orders" : "/cart"}
+              onClick={() => {
+                if (admin) {
+                  dispatch(setNewOrderCount(0)); // manually reset count when admin clicks orders
+                }
+              }}
+            >
+              <div className="block md:hidden lg:hidden cursor-pointer">
+                {openNav ? null : (
+                  <div className="flex relative w-fit">
+                    {admin ? (
+                      <>
+                        <div className="text-[25px]">
+                          <BsBag />
+                        </div>
+                        {adminOrders?.newOrderCount > 0 && (
+                          <div className="absolute -top-2 -right-2 bg-red-500 text-white text-[12px] w-5 h-5 flex items-center justify-center rounded-full">
+                            {adminOrders.newOrderCount}
+                          </div>
+                        )}
+                      </>
+                    ) : (
+                      <>
+                        <div className="text-[25px]">
+                          <IoCartOutline />
+                        </div>
+                        {cartProducts?.cartItems?.length > 0 && (
+                          <div className="absolute -top-2 -right-2 bg-red-500 text-white text-[12px] w-5 h-5 flex items-center justify-center rounded-full">
+                            {cartProducts.cartItems.length}
+                          </div>
+                        )}
+                      </>
+                    )}
+                  </div>
+                )}
+              </div>
             </Link>
+
             <div
               onClick={() => {
                 if (openNav) {
@@ -171,38 +226,46 @@ const Header = () => {
               } sm:flex md:flex  {user.role == "admin"? "sm:w-[55%] md:w-[55%] lg:w-[50%]" : "sm:w-[55%] md:w-[45%] lg:w-[35%]" } justify-between items-center font-bold`}
             >
               {/* dynamic header data */}
-              {HeaderData.map((info, index) => {
-                return (
-                  <Link
-                    key={info.id || index}
-                    className={`${
-                      isActive(info.pathName)
-                        ? "active"
-                        : "hover:border-b hover:border-primary"
-                    }`}
-                    onClick={() => {
-                      if (openNav) {
-                        setOpenNav(false);
-                      }
-                    }}
-                    href={info.pathName}
-                  >
-                    {info?.name == "Cart" ? (
-                      <div className="relative w-fit">
-                        {" "}
-                        <div>{info.name}</div>{" "}
-                        {cartProducts?.cartItems?.length > 0 &&
-                            <div className="absolute -top-2 -right-4 md:-top-3 md:-right-4 bg-red-500 text-white text-[15px] md:text-[12px] w-6 h-6 md:w-5 md:h-5 flex items-center justify-center rounded-full">
-                              {cartProducts.cartItems.length}
-                            </div>
-                          }
-                      </div>
-                    ) : (
-                      info.name
-                    )}
-                  </Link>
-                );
-              })}
+              {HeaderData.map((info, index) => (
+                <Link
+                  key={info.id || index}
+                  className={`${
+                    isActive(info.pathName)
+                      ? "active"
+                      : "hover:border-b hover:border-primary"
+                  }`}
+                  onClick={() => {
+                    if (openNav) setOpenNav(false);
+                    if (admin && info.name === "Orders") {
+                      dispatch(setNewOrderCount(0)); // reset on clicking "Orders"
+                    }
+                  }}
+                  href={info.pathName}
+                >
+                  {info.name === "Orders" && admin ? (
+                    <div className="relative w-fit">
+                      <span>{info.name}</span>
+                      {adminOrders.newOrderCount > 0 && (
+                        <div className="absolute -top-2 -right-4 bg-red-500 text-white text-[12px] w-5 h-5 flex items-center justify-center rounded-full">
+                          {adminOrders.newOrderCount}
+                        </div>
+                      )}
+                    </div>
+                  ) : info.name === "Cart" ? (
+                    <div className="relative w-fit">
+                      <div>{info.name}</div>
+                      {cartProducts?.cartItems?.length > 0 && (
+                        <div className="absolute -top-2 -right-4 md:-top-3 md:-right-4 bg-red-500 text-white text-[15px] md:text-[12px] w-6 h-6 md:w-5 md:h-5 flex items-center justify-center rounded-full">
+                          {cartProducts.cartItems.length}
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    info.name
+                  )}
+                </Link>
+              ))}
+
               {/* Login Logout button  */}
               <Button>
                 <Link
