@@ -16,7 +16,7 @@ const OurRestaurant = () => {
       <div className="w-[90%] mx-auto flex flex-col-reverse md:flex-row-reverse md:justify-between md:items-center">
         <div className="w-[90%] md:w-[50%] mx-auto">
           <h3 className="text-35 font-bold">
-            For every specialoccasion there's heritaste
+            For every specialoccasion theres heritaste
           </h3>
           <p className="text-18 pt-2">
             Indignation and dislike men who are so beguiled demoralized by the

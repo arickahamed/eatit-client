@@ -21,7 +21,7 @@ const Delivery = () => {
           </h3>
           <p className="text-20">
             Food Khan is a restaurant, bar and coffee roastery located on a busy
-            corner site in Farringdon's Exmouth Market. With glazed frontage on
+            corner site in Farringdons Exmouth Market. With glazed frontage on
             two sides of the building, overlooking the market and a bustling
             London inteon.
           </p>

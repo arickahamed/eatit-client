@@ -6,6 +6,9 @@ import Link from "next/link";
 
 const WeAreBest = () => {
   const [hoverIndex, setHoverIndex] = useState(null);
+  
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   const handleMouseEnter = (index: any) => setHoverIndex(index);
   const handleMouseLeave = () => setHoverIndex(null);
   return (

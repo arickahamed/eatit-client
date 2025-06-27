@@ -5,7 +5,7 @@ import phoneIcon from "@/images/header/phone_icon.png";
 import Image from "next/image";
 import { HiMenuAlt3 } from "react-icons/hi";
 import { RxCross2 } from "react-icons/rx";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Button from "../../overall/Button";
 import "./Header.css";
@@ -26,7 +26,7 @@ const Header = () => {
   const [openNav, setOpenNav] = useState(false);
   // const [orders, setOrders] = useState([]);
   // console.log(orders.length);
-  const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
+  const handleOpenNavMenu = () => {
     if (window.scrollY > 5) {
       window.scrollTo({ top: 0, behavior: "smooth" });
       setOpenNav(!openNav);
