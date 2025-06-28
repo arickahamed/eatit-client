@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react';
+import React, { ChangeEvent, FormEvent, useState } from 'react';
 import registerHeroImage from "./registerImage/hero-login.png";
 import HeroSection from '@/components/shared/HeroSection';
 import Link from 'next/link';
@@ -27,11 +27,11 @@ const Register = () => {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 
-  const onOptionChange = (e: any) => {
+  const onOptionChange = (e:ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setRole(e.target.value);
   };
 
-  const handleInputChange = (event: any) => {
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setFormData((prevData) => ({
       ...prevData,
@@ -39,7 +39,7 @@ const Register = () => {
     }));
   };
 
-  const handleSubmit = async (event: any) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (
       formData.email.length > 5 &&

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { ChangeEvent, FormEvent, useState } from "react";
 import heroImage from "@/app/about/about_images/hero_about-bg.png";
 
 import HeroSection from "@/components/shared/HeroSection";
@@ -7,7 +7,7 @@ import ScrollUp from "@/components/shared/ScrollUp";
 import axios from "axios";
 import ShowToast from "@/components/shared/ShowToast";
 
-const addItem = () => {
+const AddItem = () => {
   const heroInfo = {
     img: heroImage,
     title: "All New Item?",
@@ -33,7 +33,7 @@ const addItem = () => {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 
-  const handleInputChange = (event: any) => {
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
 
     setFormData((prevData) => ({
@@ -42,8 +42,8 @@ const addItem = () => {
     }));
   };
 
-  const handleImageChange = (event: any) => {
-    const file = event.target.files[0];
+  const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
     if (file) {
       setFormData((prevData) => ({
         ...prevData,
@@ -54,7 +54,7 @@ const addItem = () => {
 
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-  const handleSubmit = async (event: any) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (isFormValid) {
@@ -187,4 +187,4 @@ const addItem = () => {
   );
 };
 
-export default addItem;
+export default AddItem;
