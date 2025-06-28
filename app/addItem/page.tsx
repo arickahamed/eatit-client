@@ -14,7 +14,14 @@ const AddItem = () => {
     description: "Read our story, How we started and about the team",
   };
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{
+    category: string;
+    title: string;
+    description: string;
+    price: number;
+    quantity: number;
+    image: File | null ;
+  }>({
     category: "select",
     title: "",
     description: "",
@@ -33,7 +40,9 @@ const AddItem = () => {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 
-  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (
+    event: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = event.target;
 
     setFormData((prevData) => ({
@@ -64,8 +73,9 @@ const AddItem = () => {
       formDataToSend.append("price", formData.price.toString());
       formDataToSend.append("quantity", formData.quantity.toString());
       formDataToSend.append("category", formData.category);
-      formDataToSend.append("image", formData.image);
-
+      if (formData.image) {
+        formDataToSend.append("image", formData.image);
+      }
       try {
         const res = await axios.post(
           `${API_URL}/api/v1/products/createProduct`,
@@ -121,13 +131,11 @@ const AddItem = () => {
                 value={formData.category}
                 onChange={handleInputChange}
               >
-                <div className="border border-blue-500 flex flex-col items-center align-center left-5">
-                  <option value="select">Select</option>
-                  <option value="breakfast">Breakfast</option>
-                  <option value="lunch">Lunch</option>
-                  <option value="dinner">Dinner</option>
-                  <option value="beverage">Beverage</option>
-                </div>
+                <option value="select">Select</option>
+                <option value="breakfast">Breakfast</option>
+                <option value="lunch">Lunch</option>
+                <option value="dinner">Dinner</option>
+                <option value="beverage">Beverage</option>
               </select>
             </div>
             <input

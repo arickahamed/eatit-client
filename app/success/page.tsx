@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { setOrderPlaced } from "@/lib/redux/features/cart/cartSlice";
 
-const orders = () => {
+const Orders = () => {
     const dispatch = useDispatch();
     const router = useRouter();
   const heroInfo = {
@@ -34,4 +34,4 @@ const orders = () => {
   );
 };
 
-export default orders;
+export default Orders;

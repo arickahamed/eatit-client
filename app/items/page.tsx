@@ -12,7 +12,7 @@ import { categoryName, IProductCategory } from './categoryInfo';
 import Link from "next/link";
 import { setCartData } from "@/lib/redux/features/cart/cartSlice";
 
-const about = () => { 
+const Items = () => { 
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const dispatch = useDispatch();
   const user = useAppSelector((state) => state.auth);
@@ -161,4 +161,4 @@ const clickAddToCart = (
   );
 };
 
-export default about;
+export default Items;

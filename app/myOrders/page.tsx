@@ -8,12 +8,22 @@ import { useAppSelector } from "@/lib/redux/hooks";
 import axios from "axios";
 import ShowToast from "@/components/shared/ShowToast";
 
+type OrderItem = {
+  title: string;
+  price: number;
+  quantity: number;
+};
 
-const orders = () => {
-    const [finalMyOrders, setFinalMyOrders] = useState([]);
-    // console.log(finalMyOrders);
-    const user = useAppSelector((state) => state.auth);
-    const heroInfo = {
+type Order = {
+  createdAt: string;
+  total: number;
+  items: OrderItem[];
+};
+
+const Orders = () => {
+  const [finalMyOrders, setFinalMyOrders] = useState<Order[]>([]);
+  const user = useAppSelector((state) => state.auth);
+  const heroInfo = {
     img: heroImage,
     title: "Your Orders",
     description: "Read our story, How we started and about the team",
@@ -21,34 +31,33 @@ const orders = () => {
 
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-    useEffect(() => {
-      const fetchMyOrders = async () => {
-        try {
-          const response = await axios.get(
-            `${API_URL}/api/v1/users/getMyOrders`,
-            {
-              params: { email: user.email },
-            }
-          );
-          const data = response.data;
-          if(data.success) {
-            setFinalMyOrders(data.data);
-          }else {
-            ShowToast({type: "error", message: "Something went wrong in fetching data from the database"});
+  useEffect(() => {
+    const fetchMyOrders = async () => {
+      try {
+        const response = await axios.get(
+          `${API_URL}/api/v1/users/getMyOrders`,
+          {
+            params: { email: user.email },
           }
-        } catch (error) {
-          console.error('Error fetching products:', error);
+        );
+        const data = response.data;
+        if (data.success) {
+          setFinalMyOrders(data.data);
+        } else {
+          ShowToast({
+            type: "error",
+            message: "Something went wrong in fetching data from the database",
+          });
         }
-      };
-      fetchMyOrders();
-    }, []);
-  
-    // {finalMyOrders.map(order => {
-    //     console.log(order)
-    // })}
+      } catch (error) {
+        console.error("Error fetching orders:", error);
+      }
+    };
+    fetchMyOrders();
+  }, []);
 
   return (
-    <main className="">
+    <main>
       <HeroSection data={heroInfo} />
       <p className="text-center my-3 font-semibold text-xl">
         You have ordered {finalMyOrders.length} times
@@ -56,7 +65,7 @@ const orders = () => {
       <div className="w-[90%] flex flex-col items-center justify-center bg-gray-200 py-3 rounded-md px-2 my-3 mx-auto">
         {finalMyOrders.length === 0 ? (
           <p className="text-center mt-4 text-gray-500">
-            You haven’t placed any orders yet.
+            You havent placed any orders yet.
           </p>
         ) : (
           finalMyOrders.map((orders, index) => (
@@ -67,8 +76,8 @@ const orders = () => {
                 {"-".repeat(7)}
               </p>
               <hr className="mb-2 border-black w-full" />
-              <h4 className="text-center font-semibold" >
-                Total Price = {orders.total} tk
+              <h4 className="text-center font-semibold">
+                Total Price = {orders.total ?? 0} tk
               </h4>
               <div className="ml-4 list-disc text-sm text-gray-600 text-center">
                 {orders.items.length > 0 ? (
@@ -93,4 +102,4 @@ const orders = () => {
   );
 };
 
-export default orders;
+export default Orders;

@@ -10,14 +10,14 @@ import { ToastContainer } from 'react-toastify';
 import axios from 'axios';
 import { setWithExpiry } from '@/utils/localStorage';
 import { getWithExpiry } from "@/utils/localStorage";
-import { useAppDispatch, useAppSelector } from '@/lib/redux/hooks';
+import { useAppDispatch } from '@/lib/redux/hooks';
 import { setAuthData } from '@/lib/redux/features/auth/authSlice';
 interface User {
   email: string;
   [key: string]: any; 
 }
 
-const login = () => {
+const Login = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirect = searchParams.get("redirect");
@@ -27,7 +27,7 @@ const login = () => {
 
   const updateEmailFromStorage = () => {
       const stringifyUser = getWithExpiry("user");
-      if (stringifyUser) {
+      if (typeof stringifyUser === "string" && stringifyUser.length > 0) {
         const user: User = JSON.parse(stringifyUser);
 
         dispatch(setAuthData({ email: user.email, role: user.role }));
@@ -135,7 +135,7 @@ const login = () => {
         </form>
       </div>
       <p className="text-center p-3">
-        Don't have a account?{" "}
+        Dont have a account?{" "}
         <Link
           className={`text-primary hover:text-orange-500`}
           href={`/Register?redirect=/orderHandler`}
@@ -148,5 +148,5 @@ const login = () => {
     </main>
   );
 }
-export default login;
+export default Login;
 

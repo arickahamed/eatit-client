@@ -12,7 +12,7 @@ import ShowToast from '@/components/shared/ShowToast';
 import { setCartData } from '@/lib/redux/features/cart/cartSlice';
 
 
-const page = () => {
+const Page = () => {
   const dispatch = useDispatch();
   const params = useParams();
   const previouslyAddedCartProduct = useAppSelector((state) => state.cartProducts.cartItems);
@@ -75,7 +75,7 @@ const heroInfo = {
           <img
             className="h-fit my-1 rounded-md block center mx-auto"
             src={`${food.image}`}
-            alt={food.id}
+            alt={food.id ?? "food image"}
           />
           <h4 className="my-3 text-xl font-bold text-center">{food.title}</h4>
           <h4 className="text-slate-600 my-4">{food.description}</h4>
@@ -85,7 +85,9 @@ const heroInfo = {
           </div>
           <button
             onClick={(e) => clickAddToCart(e)}
-            className={`block w-[70%] lg:w-[50%] mx-auto hover:bg-customWhite hover:text-primary border-red-600 bg-primary text-customWhite border  mt-4 mb-2 py-2 px-4 rounded-md shadow-md transition ease-in-out delay-150 ${admin ? "hidden": ""}`}
+            className={`block w-[70%] lg:w-[50%] mx-auto hover:bg-customWhite hover:text-primary border-red-600 bg-primary text-customWhite border  mt-4 mb-2 py-2 px-4 rounded-md shadow-md transition ease-in-out delay-150 ${
+              admin ? "hidden" : ""
+            }`}
           >
             Add to Cart
           </button>
@@ -96,4 +98,4 @@ const heroInfo = {
   );
 }
 
-export default page
+export default Page;

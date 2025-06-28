@@ -13,7 +13,7 @@ import axios from "axios";
 import ShowToast from "@/components/shared/ShowToast";
 import Link from "next/link";
 
-const cart = () => {
+const Cart = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const heroInfo = {
@@ -31,7 +31,7 @@ const cart = () => {
   // console.log(email);
 
   const total = cartItems?.reduce(
-    (sum, product) => sum + product.price * product.quantity,
+    (sum, product) => sum + (product.price ?? 0) * (product.quantity ?? 0),
     0
   );
   // console.log(total);
@@ -46,24 +46,32 @@ const cart = () => {
 
   // add button clicked
   const clickAddToCart = (id: number) => {
-    const cart = [...cartItems];
-    const updatedCart = cart.map((item) =>
-      item.id === id ? { ...item, quantity: item.quantity + 1 } : item
+    const updatedCart = cartItems.map((item) =>
+      Number(item.id) === id
+        ? {
+            ...item,
+            quantity: Number(item.quantity) + 1,
+          }
+        : item
     );
     dispatch(setCartData(updatedCart));
   };
 
   // subtract button clicked
-  const clickRemoveFromCart = (id: number) => {
-    const cart = [...cartItems];
-    const updatedCart = cart
-      .map((item) =>
-        item.id === id ? { ...item, quantity: item.quantity - 1 } : item
-      )
-      .filter((item) => item.quantity > 0); // Remove items with 0 quantity
+  // const clickRemoveFromCart = (id: number) => {
+  //   const updatedCart = cartItems
+  //     .map((item) =>
+  //       Number(item.id) === id
+  //         ? {
+  //             ...item,
+  //             quantity: Number(item.quantity) - 1,
+  //           }
+  //         : item
+  //     )
+  //     .filter((item) => Number(item.quantity) > 0);
 
-    dispatch(setCartData(updatedCart));
-  };
+  //   dispatch(setCartData(updatedCart));
+  // };
 
   const handleConfirmOrder = async() => {
     const orderedData = {email, cartItems, total};
@@ -101,26 +109,39 @@ const cart = () => {
           >
             <img
               className="w-[10%] h-[10%] md:w-[7%] md:h-[7%] lg:w-[5%] lg:h-[5%] rounded-md"
-              src={product.image}
+              src={product.image ?? undefined}
               alt=""
             />
             <div className="font-semibold">{product.title}</div>
             <div className="font-semibold">
-              ${product.price} * {product.quantity} ={" "}
+              ${product.price ?? 0} * {product.quantity} ={" "}
               <span className="text-green-800 font-bold">
-                ${product.price * product.quantity}
+                ${((product.price ?? 0) * (product.quantity ?? 0)).toFixed(2)}
               </span>
             </div>
             <div className={`${orderPlaced ? "hidden" : "flex"}`}>
               <button
                 className="bg-gradient-to-r from-green-500 to-green-700 text-white rounded-md p-1"
-                onClick={() => clickAddToCart(product.id)}
+                onClick={() => {
+                  if (product.id !== null) {
+                    clickAddToCart(Number(product.id));
+                  } else {
+                    console.error("Product id is null");
+                  }
+                }}
               >
                 <MdAdd />
               </button>
               <button
                 className="bg-gradient-to-r from-red-500 to-red-700 text-white rounded-md ml-2 p-1"
-                onClick={() => clickRemoveFromCart(product.id)}
+                onClick={() => {
+                  if (product.id !== null) {
+                    clickAddToCart(Number(product.id));
+                  } else {
+                    // handle null id case (optional)
+                    console.error("Product id is null");
+                  }
+                }}
               >
                 <GrFormSubtract />
               </button>
@@ -131,7 +152,9 @@ const cart = () => {
         <div className="text-center my-4 text-lg">
           No Product Added.
           <br />
-          <Link href="/items" className="underline">Want to have a meal Items ?</Link>
+          <Link href="/items" className="underline">
+            Want to have a meal Items ?
+          </Link>
         </div>
       )}
 
@@ -181,4 +204,4 @@ const cart = () => {
   );
 };
 
-export default cart;
+export default Cart;

@@ -6,15 +6,15 @@ import axios from "axios";
 import { setCartClear } from "@/lib/redux/features/cart/cartSlice";
 import ShowToast from "@/components/shared/ShowToast";
 
-const orderHandler = () => {
+const OrderHandler = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const { email } = useAppSelector((state) => state.auth);
   const { cartItems } = useAppSelector((state) => state.cartProducts);
-  const total = cartItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0
-  );
+  const total = cartItems.reduce((sum, item) => {
+    if (!item || item.price == null || item.quantity == null) return sum;
+    return sum + item.price * item.quantity;
+  }, 0);
 
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -46,4 +46,4 @@ const orderHandler = () => {
   return <p>Placing your order...</p>;
 };
 
-export default orderHandler;
+export default OrderHandler;
